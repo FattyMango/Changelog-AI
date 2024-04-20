@@ -23,31 +23,25 @@ func main() {
 	Dont add any extra information.
 	Only seperate the changes with a new line and '-'.
 	and include the functions and models that were changed in that line.
-	old:
-		func NewRequest(method string, url string, body interface{}) *Request {
-			return &Request{
-				Method:  method,
-				Client:  &http.Client{},
-				Headers: make(map[string]string),
-				Timeout: 30 * time.Second,
-				Url:     url,
-				Body:    body,
-			}
-		}
-	new:
-		
-		func NewRequest(method string, url string, body string) *Request {
-			return &Request{
-				Method:  method,
-				Client:  &http.Client{},
-				Headers: make(map[string]string),
-				Timeout: 30 * time.Second,
-				Url:     url,
-				Body:    body,
-			}
-		}
-
+	
 `
+	// read old swagger file
+	old,err := os.ReadFile("swagger.old.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// read new swagger file
+	new,err := os.ReadFile("swagger.new.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	data +=`old:
+	` + string(old) +`
+	
+	new:
+	` + string(new) +`
+	`
 
 	client, err := gemeni.NewGemini(ctx, key)
 	if err != nil {
